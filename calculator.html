@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .calc {
+      width: 300px;
+      margin: 50px auto;
+      border: 1px solid white
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: grid;
+      grid-template-columns: repeat(5, 19%);
+      grid-gap: 5px;
+      padding: 5px;
+    }
+
+    .display {
+      grid-column: span 5;
+      width: 100%;
+      padding: 10px;
+      font-size: 20px;
+      text-align: right;
+      border: none;
+      outline: none;
+    }
+
+    .button {
+      width: 100%;
+      padding: 15px 0;
+      font-size: 18px;
+      border: none;
+      background-color: #f2f2f2;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #e5e5e5;
+    }
+
+    .button.operation {
+      background-color: black;
+      color: #fff;
+    }
+
+    .button.operation:hover {
+      background-color: #444342;
+    }
+
+    .button.enter-button {
+    grid-column: span 2;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="calc" id="calc">
+    <input type="text" class="display" id="display" readonly>
+    <button class="button" onclick="addToDisplay('(')">(</button>
+    <button class="button" onclick="addToDisplay(')')">)</button>
+    <button class="button operation" onclick="recallAnswer()">Ans</button>
+    <button class="button operation" onclick="deleteLastCharacter()">Del</button>
+    <button class="button operation" onclick="clearDisplay()">C</button>
+    <button class="button" onclick="addToDisplay('7')">7</button>
+    <button class="button" onclick="addToDisplay('8')">8</button>
+    <button class="button" onclick="addToDisplay('9')">9</button>
+    <button class="button operation" onclick="calculatePercentage()">%</button>
+    <button class="button operation" onclick="calculateSquareRoot()">√</button>
+    <button class="button" onclick="addToDisplay('4')">4</button>
+    <button class="button" onclick="addToDisplay('5')">5</button>
+    <button class="button" onclick="addToDisplay('6')">6</button>
+    <button class="button operation" onclick="addToDisplay('*')">*</button>
+    <button class="button operation" onclick="addToDisplay('/')">/</button>
+    <button class="button" onclick="addToDisplay('1')">1</button>
+    <button class="button" onclick="addToDisplay('2')">2</button>
+    <button class="button" onclick="addToDisplay('3')">3</button>
+    <button class="button operation" onclick="addToDisplay('-')">-</button>
+    <button class="button operation" onclick="addToDisplay('+')">+</button>
+    <button class="button" onclick="addToDisplay('.')">.</button>
+    <button class="button" onclick="addToDisplay('0')">0</button>
+    <button class="button operation" onclick="toggleSign()">+/-</button>
+    <!-- Adjusted colspan for "Enter" button -->
+        <button class="button operation enter-button" onclick="calculate()">Enter</button>
+  </div>
+  
+
+<script>
+  function addToDisplay(value) {
+    document.getElementById('display').value += value;
+  }
+
+  function clearDisplay() {
+    document.getElementById('display').value = '';
+  }
+
+  function deleteLastCharacter() {
+    var display = document.getElementById('display');
+    display.value = display.value.slice(0, -1);
+  }
+
+  function toggleSign() {
+    var display = document.getElementById('display');
+    if (display.value !== '' && display.value !== '0') {
+      if (display.value.charAt(0) === '-') {
+        display.value = display.value.slice(1);
+      } else {
+        display.value = '-' + display.value;
+      }
+    }
+  }
+
+  function calculate() {
+    var display = document.getElementById('display');
+    try {
+      display.value = eval(display.value);
+    } catch (error) {
+      display.value = 'Error';
+    }
+  }
+
+  function calculatePercentage() {
+    var display = document.getElementById('display');
+    display.value = eval(display.value + '/100');
+  }
+
+  function calculateSquareRoot() {
+    var display = document.getElementById('display');
+    display.value = Math.sqrt(eval(display.value));
+  }
+
+  function recallAnswer() {
+    var display = document.getElementById('display');
+    if (recallAnswer.result !== undefined) {
+      display.value += recallAnswer.result;
+    }
+  }
+
+  // Listen for the 'Enter' key press to calculate
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      calculate();
+    }
+  });
+
+  // Save the last result for the 'Ans' function
+  var recallAnswer = function() {
+    var display = document.getElementById('display');
+    var lastResult = display.value;
+    return { result: lastResult };
+  };
+</script>
+
+</body>
+</html>
